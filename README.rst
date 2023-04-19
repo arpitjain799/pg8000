@@ -322,7 +322,7 @@ You might think that the following would work, but in fact the server doesn't li
 >>>
 >>> con = pg8000.native.Connection("postgres", password="cpsnow")
 >>>
->>> con.run("SELECT 'silo 1' WHERE 'a' IN :v", v=('a', 'b'))
+>>> con.run("SELECT 'silo 1' WHERE 'a' IN :v", v=['a', 'b'])
 Traceback (most recent call last):
 pg8000.exceptions.DatabaseError: ...
 >>>
@@ -337,7 +337,7 @@ instead you can write it using the `unnest
 >>>
 >>> con.run(
 ...     "SELECT 'silo 1' WHERE 'a' IN (SELECT unnest(CAST(:v as varchar[])))",
-...     v=('a', 'b'))
+...     v=['a', 'b'])
 [['silo 1']]
 >>> con.close()
 
@@ -936,7 +936,7 @@ A round-trip with a `PostgreSQL point
 >>> con = pg8000.dbapi.connect(user="postgres", password="cpsnow")
 >>> cursor = con.cursor()
 >>>
->>> cursor.execute("SELECT cast(%s as point)", ('(2.3,1)',))
+>>> cursor.execute("SELECT cast(%s as point)", ((2.3,1),))
 >>> cursor.fetchone()
 ['(2.3,1)']
 >>>
